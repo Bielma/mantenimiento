@@ -3,13 +3,15 @@ import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
-
+    
     render() {
+        const currentUser = this.props.user;
+        var tipoEmpleado = currentUser.puesto;
 
-        if (this.props.puesto === 'Gerente') {
+        if (tipoEmpleado === 'Gerente') {
             return (
                 <Navbar bg="light" expand="lg">
-                    <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                    <Navbar.Brand href="#home">Orden de Servicio</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
@@ -22,17 +24,36 @@ class Header extends Component {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item >Salir</NavDropdown.Item>
                             </NavDropdown>
+                            <NavDropdown title="Insumos" id="basic-nav-dropdown">
+                                <NavDropdown.Item >
+                                    <NavLink to="/new_insumo">Nuevo Insumo</NavLink>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item >
+                                    <NavLink to="/insumos">Insumos</NavLink>
+                                </NavDropdown.Item>
+                           
+                            </NavDropdown>
+                            <NavDropdown title="Empleados" id="basic-nav-dropdown">
+                                <NavDropdown.Item >
+                                    <NavLink to="/new_empleado">Nuevo Empleado</NavLink>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item >
+                                    <NavLink to="/empleados">Ver emleados</NavLink>  
+                                </NavDropdown.Item>
+                             
+                               
+                            </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
                         <Navbar.Text>
-                            Usuario: <a href="#login">Bielma</a>
+                            Usuario: <a href="#login">{currentUser.nombre}</a>
                         </Navbar.Text>
                     </Navbar.Collapse>
                 </Navbar>
             );
         }
-        else if (this.props.puesto === 'Almacenista') {
+        else if (tipoEmpleado === 'Almacenista') {
             return (
                 <Navbar bg="light" expand="lg">
                     <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
@@ -57,7 +78,7 @@ class Header extends Component {
                     </Navbar.Collapse>
                 </Navbar>
             );
-        } else if (this.props.puesto === '') {
+        } else if (tipoEmpleado === '') {
             return (
                 <Navbar bg="light" expand="lg">
                     <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>

@@ -5,7 +5,7 @@ class Home extends Component{
         return(
             
             <div className = "Home">
-                <Header puesto = {'as'}/>
+                <Header user = {'as'}/>
                 <h1>Homee xD </h1>
             </div>
         );

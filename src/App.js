@@ -8,8 +8,8 @@ import Empleados from './components/empleados/Empleados';
 
 function App() {
   return (
-    <Empleados/>
-    //<Router/>
+    
+    <Router/>
   );
 }
 

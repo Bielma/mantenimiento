@@ -31,14 +31,11 @@ const EmpleadoForm = () => {
         let jsonEmpleado = JSON.stringify(empleado);
         let datos = 'datos=' + jsonEmpleado;
         console.log(datos);
-        axios.post('http://bielma.com/sem-isw/empleado', datos, {
-            headers: { Authorization: token }
-        })
+        axios.post('http://bielma.com/sem-isw/empleado', datos)
             .then(res => {
-                if(res.data.status === 'succes')
-                {
-                    setMessage(res.data.message);
-                }
+              
+                setMessage(res.data.message);
+              
                 console.log(res.data.message);                
             }, (error) => {
                 console.log(error);
@@ -52,13 +49,13 @@ const EmpleadoForm = () => {
         <div>
             <Header user={user} />
 
-            <form onSubmit={handleSubmit}>
+            <form className = "form-style-9" onSubmit={handleSubmit}>
                 <div className="form-row">
-                    <div className="form-group col-md-3">
+                    <div className="form-group col-md-4">
                         <label htmlFor="nombre"> Nombre:</label>
                         <input type="text" name="nombre" className="form-control" onChange={handleInputChange} />
                     </div>
-                    <div className="form-group col-md-3">
+                    <div className="form-group col-md-4">
                         <label htmlFor="phone">Telefono:</label>
                         <input type="text" name="phone" className="form-control" onChange={handleInputChange} />
                     </div>
@@ -68,16 +65,21 @@ const EmpleadoForm = () => {
                     </div>
                 </div>
                 <div className="form-row">
-                    <div className="form-group col-md-3">
+                    <div className="form-group col-md-5">
                         <label htmlFor="email">Email</label>
                         <input type="email" className="form-control" id="email" name="email" onChange={handleInputChange} />
                     </div>
-                    <div className="form-group col-md-3">
+                    <div className="form-group col-md-5">
                         <label htmlFor="pass">Password</label>
                         <input type="password" className="form-control" name="pass" id="pass" onChange={handleInputChange} />
                     </div>
                   
-                    <div className="help-block">{message}</div>
+                    { 
+                        message !== '' &&
+                        <div class="alert alert-primary" role="alert">
+                            {message}
+                        </div>
+                     }
                     
                 </div>
 

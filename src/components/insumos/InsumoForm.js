@@ -29,15 +29,10 @@ const InsumoForm = () => {
         let jsonInsumo = JSON.stringify(insumo);
         let datos = 'datos=' + jsonInsumo;
         console.log(datos);
-        axios.post('http://bielma.com/sem-isw/insumo', datos, {
-            headers: { Authorization: token }
-        })
-            .then(res => {
-                if(res.data.status === 'succes')
-                {
-                    setMessage(res.data.message);
-                }
-                console.log(res.data.message);                
+        axios.post('http://bielma.com/sem-isw/insumo', datos)
+            .then(res => {                
+                setMessage(res.data.message);
+                console.log(res);    
             }, (error) => {
                 console.log(error);
             });
@@ -66,12 +61,17 @@ const InsumoForm = () => {
             </div>
             <div className="form-row">
                 <div className="form-group col-md-6">
-                <label htmlFor="descripcion">Descripción</label>
+                    <label htmlFor="descripcion">Descripción</label>
                     <input type="text" className="form-control" id="email"name = "descripcion" onChange = {handleInputChange}/>
                 </div>
                
             </div>
-          
+          { 
+            message !== '' &&
+            <div class="alert alert-primary" role="alert">
+                {message}
+            </div>
+          }
             
             <input type="submit" name="submit" value="Registrar" className="btn btn-primary" />
                    

@@ -3,8 +3,8 @@ import Header from '../Header';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
 
-const Insumos = () => {
-    const [insumos, setInsumos] = useState([{}]);
+const Servicios = () => {
+    const [servicios, setServicios] = useState([{}]);
     const [user, setUser] = useState({});
     const [succes, setSucces] = useState(false);
     const [formValue, handleInputChange] = useForm({
@@ -12,24 +12,24 @@ const Insumos = () => {
     })
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user')));
-        getInsumos();
+        getServicios();
 
 
     }, [])
 
-    const getInsumos = () => {
-        axios.get('http://bielma.com/sem-isw/insumo')
+    const getServicios = () => {
+        axios.get('http://bielma.com/sem-isw/orden')
             .then(res => {
-                setInsumos(res.data.insumos)
+                setServicios(res.data.ordenes);
             });
     }
     const buscar = (e) =>{
         e.preventDefault();
-        axios.get('http://bielma.com/sem-isw/insumo/'+ formValue.id)
+        axios.get('http://bielma.com/sem-isw/orden/'+ formValue.id)
         
         .then(res => {
             console.log(res);
-            setInsumos(res.data.empleado)
+            setServicios(res.data.ordenes);
         });
     
     }
@@ -50,21 +50,21 @@ const Insumos = () => {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">ID</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Descripcion</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Existencia</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Tecnico</th>
+                                <th scope="col">Observaciones</th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                insumos.map(item => (
-                                    <tr key={item.id_insumo}>
-                                        <td> {item.id_insumo}</td>
-                                        <td>{item.nombre}</td>
+                                servicios.map(item => (
+                                    <tr key={item.id_orden}>
+                                        <td> {item.id_orden}</td>
+                                        <td>{item.telefono}</td>
+                                        <td>{item.id_empleado}</td>
                                         <td>{item.descripcion}</td>
-                                        <td>{item.precio}</td>
-                                        <td>{item.existencia}</td>
+                                        <td>{item.status}</td>
                                     </tr>
                                 ))
                             }
@@ -75,4 +75,4 @@ const Insumos = () => {
     );
 }
 
-export default Insumos;
+export default Servicios;

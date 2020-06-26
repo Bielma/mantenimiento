@@ -47,8 +47,8 @@ const InsumoForm = () => {
 
     return (
         <div>
-            <Header user = {user    }/>
-            <form  onSubmit={handleSubmit}>
+            <Header user = {user}/>
+            <form className = "form-style-9" onSubmit={handleSubmit}>
               <div className = "form-row">
                 <div className="form-group col-md-3">
                     <label htmlFor="nombre"> Nombre:</label>    
@@ -58,7 +58,7 @@ const InsumoForm = () => {
                     <label htmlFor="precio">Precio</label>    
                     <input type="text" name="precio" className = "form-control" onChange = {handleInputChange}/>
                 </div>
-                <div className="form-group col-md-1">
+                <div className="form-group col-md-2">
                     <label htmlFor="stock">Existencia</label>    
                     <input type="text" name="stock" className = "form-control" onChange = {handleInputChange}/>
                 </div>

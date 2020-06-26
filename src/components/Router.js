@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch}from 'react-router-dom';
 import Home from './Home.js';
 import SignIn from './SignIn.js';
 import NuevaOrdenServicio from './orden_servicio/NuevaOrdenServicio.js';
+import Servicios from './orden_servicio/Servicios.js';
 import EmpleadoForm from './empleados/EmpleadoForm.js'
 import Empleados from './empleados/Empleados.js'
 import InsumoForm from './insumos/InsumoForm.js';
@@ -19,6 +20,7 @@ class Router extends Component{
                 <Route exact path = "/empleados" component = {Empleados}/>  
                 <Route exact path = "/new_insumo" component = {InsumoForm}/>  
                 <Route exact path = "/insumos" component = {Insumos}/>  
+                <Route exact path = "/servicios" component = {Servicios} />  
             </Switch>
             </BrowserRouter>
         ); 

@@ -29,7 +29,7 @@ const Servicios = () => {
         
         .then(res => {
             console.log(res);
-            setServicios(res.data.ordenes);
+            setServicios(res.data.orden);
         });
     
     }
@@ -63,7 +63,7 @@ const Servicios = () => {
                                         <td> {item.id_orden}</td>
                                         <td>{item.telefono}</td>
                                         <td>{item.id_empleado}</td>
-                                        <td>{item.descripcion}</td>
+                                        <td>{item.observaciones}</td>
                                         <td>{item.status}</td>
                                     </tr>
                                 ))

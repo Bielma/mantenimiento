@@ -25,11 +25,11 @@ const Insumos = () => {
     }
     const buscar = (e) =>{
         e.preventDefault();
-        axios.get('http://bielma.com/sem-isw/insumo/'+ formValue.id)
+        axios.get('http://bielma.com/sem-isw/insumo/'+ formValue.id_insumo)
         
         .then(res => {
             console.log(res);
-            setInsumos(res.data.empleado)
+            setInsumos([res.data.insumo])
         });
     
     }

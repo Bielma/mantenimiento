@@ -32,10 +32,8 @@ const EmpleadoForm = () => {
         let datos = 'datos=' + jsonEmpleado;
         console.log(datos);
         axios.post('http://bielma.com/sem-isw/empleado', datos)
-            .then(res => {
-              
-                setMessage(res.data.message);
-              
+            .then(res => {              
+                setMessage(res.data.message);              
                 console.log(res.data.message);                
             }, (error) => {
                 console.log(error);

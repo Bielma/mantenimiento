@@ -41,6 +41,14 @@ class Header extends Component {
                                     <NavLink to="/empleados">Ver emleados</NavLink>  
                                 </NavDropdown.Item>                                                            
                             </NavDropdown>
+                            <NavDropdown title="Clientes" id="basic-nav-dropdown">
+                                <NavDropdown.Item >
+                                    <NavLink to="/new_cliente">Nuevo Cliente</NavLink>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item >
+                                    <NavLink to="/clientes">Ver clientes</NavLink>  
+                                </NavDropdown.Item>                                                            
+                            </NavDropdown>
                             <NavDropdown title="Menu" id="basic-nav-dropdown">
                                 <NavDropdown.Item >aber</NavDropdown.Item>                              
                                 <NavDropdown.Divider />

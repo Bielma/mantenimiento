@@ -8,6 +8,8 @@ import EmpleadoForm from './empleados/EmpleadoForm.js'
 import Empleados from './empleados/Empleados.js'
 import InsumoForm from './insumos/InsumoForm.js';
 import Insumos from './insumos/Insumos.js';
+import RegistrarClientes from './clientes/RegistrarClientes.js';
+import Clientes from './clientes/Clientes.js';
 class Router extends Component{
     render(){
         return(
@@ -21,6 +23,8 @@ class Router extends Component{
                 <Route exact path = "/new_insumo" component = {InsumoForm}/>  
                 <Route exact path = "/insumos" component = {Insumos}/>  
                 <Route exact path = "/servicios" component = {Servicios} />  
+                <Route exact path = "/new_cliente" component = {RegistrarClientes} />  
+                <Route exact path = "/clientes" component = {Clientes} />  
             </Switch>
             </BrowserRouter>
         ); 

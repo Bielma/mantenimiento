@@ -25,11 +25,10 @@ const Empleados = () => {
     }
     const buscar = (e) =>{
         e.preventDefault();
-        axios.get('http://bielma.com/sem-isw/empleado/'+ formValue.id)
-        
+        axios.get('http://bielma.com/sem-isw/empleado/'+ formValue.id_empleado)        
         .then(res => {
             console.log(res);
-            setEmpleados(res.data.empleado)
+            setEmpleados([res.data.empleado])
         });
     
     }

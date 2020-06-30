@@ -12,7 +12,7 @@ const EditarServicio = ({ servicio }) => {
     const [nombreCliente, setNombreCliente] = useState('');
     const [emailCliente, setEmailCliente] = useState('');
     const [insumos, setInsumos] = useState([]);
-    const [numInsumos, setNumInsumos] = useState(1);
+    const [numInsumos, setNumInsumos] = useState(0);
     const [total, setTotal] = useState(0)
     //const [status, setStatus] = useState('En Revisión');    
     const [formValues, handleInputChange] = useForm({
@@ -22,7 +22,6 @@ const EditarServicio = ({ servicio }) => {
     });
     
 
-    //    const [clienteValues, buscar] = buscarEmpleado(formValues.telefono);
     const handleSubmit = (e) => {
         e.preventDefault();
         if(formValues.status == 'Con Daignóstico'){
@@ -97,10 +96,14 @@ const EditarServicio = ({ servicio }) => {
 
             });
     }
-    const addInsumo = () =>{
-        setNumInsumos(numInsumos +1);   
-                     
+    const addInsumoComponent = () =>{
+        setNumInsumos(numInsumos +1);  
     }
+    const addInsumo = () =>{
+        console.log("Probando prop");
+        
+    }
+
     return (
         <div>
             <div className="form-style-9">
@@ -185,14 +188,59 @@ const EditarServicio = ({ servicio }) => {
                         </textarea>
                         <legend><span class="number">5 </span>Insumos</legend>   
                        
+                        {
+                            numInsumos === 1 &&
+                            <InsumoServicio addInsumo = {addInsumo}/>
+                        }    
+                        {
+                            
+                            numInsumos === 2 &&
+                            <>
+                                <InsumoServicio />
+                                <InsumoServicio />
+                            </>
+                            
+                        }   
+                         {
+                            
+                            numInsumos === 3 &&
+                            <>
+                                <InsumoServicio addInsumo = {addInsumo}/>
+                                <InsumoServicio />
+                                <InsumoServicio />
+                            </>
+                            
+                        }    
+                         {
+                            
+                            numInsumos === 4 &&
+                            <>
+                                <InsumoServicio />
+                                <InsumoServicio />
+                                <InsumoServicio />
+                                <InsumoServicio />
+                            </>
+                            
+                        }     
+                         {
+                            
+                            numInsumos === 5 &&
+                            <>
+                                <InsumoServicio />
+                                <InsumoServicio />
+                                <InsumoServicio />
+                                <InsumoServicio />
+                                <InsumoServicio />
+                            </>
+                            
+                        }     
                         
                         
                         <div className="col-md-1">
-                            <input type="button" class="btn btn-success" id="add" value="+" onClick = {addInsumo}/>
+                            <input type="button" class="btn btn-success" id="add" value="+" onClick = {addInsumoComponent}/>
                         </div>
                     </div>                        
-                    
-                   
+                                       
                      
                 }
                 

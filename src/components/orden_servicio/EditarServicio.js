@@ -11,13 +11,14 @@ const EditarServicio = ({ servicio }) => {
     const [nombreEmpleado, setNombreEmpleado] = useState('');
     const [nombreCliente, setNombreCliente] = useState('');
     const [emailCliente, setEmailCliente] = useState('');
-    //const [insumos, setInsumos] = useState([{}]);
+    const [insumos, setInsumos] = useState([]);
     const [numInsumos, setNumInsumos] = useState(1);
-    
+    const [total, setTotal] = useState(0)
     //const [status, setStatus] = useState('En Revisión');    
     const [formValues, handleInputChange] = useForm({
         status: servicio.status,
-        diagnostico: ''             
+        diagnostico: servicio.diagnostico,
+        observaciones: ''         
     });
     
 
@@ -25,26 +26,51 @@ const EditarServicio = ({ servicio }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(formValues.status == 'Con Daignóstico'){
-            var diagnostico = {};
-            diagnostico['id_orden'] = servicio.id_orden;
-            diagnostico['diagnostico'] = formValues.diagnostico;
-            diagnostico['status'] = formValues.status;
-            let jsonVenta = JSON.stringify(diagnostico);
-            let datos = 'datos=' + jsonVenta;
-            console.log(jsonVenta);
-            axios.post('http://bielma.com/sem-isw/update_diagnostico', datos)
-                .then(res => {
-                    alert(res.data.message);
-                    console.log(res.data.message);
-                }, (error) => {
-                    console.log(error);
-                });
-        }else{
-            console.log(' No es diagnostico');
+           setDiagnostico();
+        }else if(formValues.status == 'Concluida'){
+            concluir();
         }
         
     }
-
+    const setDiagnostico = () =>
+    {
+        var diagnostico = {};
+        diagnostico['id_orden'] = servicio.id_orden;
+        diagnostico['diagnostico'] = formValues.diagnostico;
+        diagnostico['status'] = formValues.status;
+        let jsonVenta = JSON.stringify(diagnostico);
+        let datos = 'datos=' + jsonVenta;
+        console.log(jsonVenta);
+        axios.post('http://bielma.com/sem-isw/update_servicio', datos)
+            .then(res => {
+                alert(res.data.message);
+                console.log(res.data.message);
+            }, (error) => {
+                console.log(error);
+            });
+    }
+    const concluir = () =>{
+        console.log('Concluida');
+        var d = new Date();
+        
+        var concluido = {};
+        concluido['id_orden'] = servicio.id_orden;
+        concluido['observaciones'] = formValues.observaciones;
+        concluido['status'] = formValues.status;
+        concluido['fecha_entrega'] = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+        concluido['insumos'] = insumos;
+        concluido['total'] = total;
+        let jsonVenta = JSON.stringify(concluido);
+        let datos = 'datos=' + jsonVenta;
+        console.log(jsonVenta);
+        axios.post('http://bielma.com/sem-isw/update_servicio', datos)
+            .then(res => {
+                alert(res.data.message);
+                console.log(res.data.message);
+            }, (error) => {
+                console.log(error);
+            });
+    }
     useEffect(() => {
         buscarCliente();
         buscarEmpleado();
@@ -73,9 +99,7 @@ const EditarServicio = ({ servicio }) => {
     }
     const addInsumo = () =>{
         setNumInsumos(numInsumos +1);   
-        return(
-            <InsumoServicio />
-        );                
+                     
     }
     return (
         <div>
@@ -114,7 +138,7 @@ const EditarServicio = ({ servicio }) => {
                         <label for="equipo">Equipo</label>
                         <input className="form-control col-md-4" name="equipo" value={servicio.equipo}></input>
                         <label for="descripcion">Descripción</label>
-                        <textarea className="form-control" name="descripcion" rows="3" value={servicio.observaciones}></textarea>
+                        <textarea className="form-control" name="descripcion" rows="3" value={servicio.falla_equipo}></textarea>
                     </fieldset>
                 </div>
 
@@ -141,31 +165,42 @@ const EditarServicio = ({ servicio }) => {
                         name="diagnostico" rows="3" 
                         placeholder = "Diagnóstico"
                         onChange = {handleInputChange}
-                        value= {servicio.diagnostico}> </textarea>
+                        value= {formValues.diagnostico}> </textarea>
                     }
 
                   
                 </div>
                 {
                     formValues.status == 'Concluida' && 
-                    <div className = "form-group" >
+                    <div className = "form-group" >                        
                         <fieldset disabled>
                             <textarea className="form-control" 
                             name="diagnostico" rows="3"                                                         
                             value= {servicio.diagnostico}> </textarea>
                         </fieldset>
+                        <textarea className="form-control"
+                            name="observaciones" rows="3"                                                        
+                            placeholder = "Observaciones" 
+                            onChange = {handleInputChange}> 
+                        </textarea>
                         <legend><span class="number">5 </span>Insumos</legend>   
+                       
                         
-                        addInsumo()
                         
                         <div className="col-md-1">
                             <input type="button" class="btn btn-success" id="add" value="+" onClick = {addInsumo}/>
                         </div>
                     </div>                        
                     
-                    
+                   
+                     
                 }
                 
+                {
+                     insumos.map(item => (
+                        <InsumoServicio />
+                    ))
+                }
                 <form className="form-group" onSubmit={handleSubmit}>                    
                     <input type="submit" className="btn btn-primary" name="enviar" value="Actualizar" />                    
                 </form>

@@ -68,7 +68,7 @@ const ServicioXTecnico = () => {
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Cliente</th>                            
-                                <th scope="col">Observaciones</th>
+                                <th scope="col">Falla</th>
                                 <th scope="col">Status</th>
                             </tr>
                         </thead>
@@ -78,7 +78,7 @@ const ServicioXTecnico = () => {
                                     <tr key={item.id_orden}>
                                         <td> {item.id_orden}</td>
                                         <td>{item.telefono}</td>                                        
-                                        <td>{item.observaciones}</td>
+                                        <td>{item.falla_equipo}</td>
                                         <td>{item.status}</td>
                                         <Button 
                                             id = {item.id_orden} 

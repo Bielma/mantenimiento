@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../Header';
 import useForm from '../../hooks/useForm';
 import axios from 'axios';
+import InsumoServicio from '../insumos/InsumoServicio.js'
 //import buscarEmpleado from '../../hooks/buscarEmpleado.js';
 const EditarServicio = ({ servicio }) => {
 
@@ -10,14 +11,13 @@ const EditarServicio = ({ servicio }) => {
     const [nombreEmpleado, setNombreEmpleado] = useState('');
     const [nombreCliente, setNombreCliente] = useState('');
     const [emailCliente, setEmailCliente] = useState('');
-    const [insumos, setInsumos] = useState([{}]);
-
+    //const [insumos, setInsumos] = useState([{}]);
+    const [numInsumos, setNumInsumos] = useState(1);
+    
     //const [status, setStatus] = useState('En Revisión');    
     const [formValues, handleInputChange] = useForm({
         status: servicio.status,
-        diagnostico: '',
-        idInsumo: '',
-        cantidad: 0        
+        diagnostico: ''             
     });
     
 
@@ -70,6 +70,12 @@ const EditarServicio = ({ servicio }) => {
                 setNombreEmpleado(res.data.empleado.nombre);
 
             });
+    }
+    const addInsumo = () =>{
+        setNumInsumos(numInsumos +1);   
+        return(
+            <InsumoServicio />
+        );                
     }
     return (
         <div>
@@ -134,12 +140,34 @@ const EditarServicio = ({ servicio }) => {
                         <textarea className="form-control" 
                         name="diagnostico" rows="3" 
                         placeholder = "Diagnóstico"
-                        onChange = {handleInputChange}> </textarea>
+                        onChange = {handleInputChange}
+                        value= {servicio.diagnostico}> </textarea>
                     }
+
+                  
                 </div>
-                <form className="form-group" onSubmit={handleSubmit}>
-                    <input type="submit" className="btn btn-primary" name="enviar" value="Actualizar" />
+                {
+                    formValues.status == 'Concluida' && 
+                    <div className = "form-group" >
+                        <fieldset disabled>
+                            <textarea className="form-control" 
+                            name="diagnostico" rows="3"                                                         
+                            value= {servicio.diagnostico}> </textarea>
+                        </fieldset>
+                        <legend><span class="number">5 </span>Insumos</legend>   
+                        
+                        addInsumo()
+                        
+                        <div className="col-md-1">
+                            <input type="button" class="btn btn-success" id="add" value="+" onClick = {addInsumo}/>
+                        </div>
+                    </div>                        
                     
+                    
+                }
+                
+                <form className="form-group" onSubmit={handleSubmit}>                    
+                    <input type="submit" className="btn btn-primary" name="enviar" value="Actualizar" />                    
                 </form>
                 
 

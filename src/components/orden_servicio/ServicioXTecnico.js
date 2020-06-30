@@ -2,41 +2,60 @@ import React, { useState, useEffect } from 'react';
 import Header from '../Header';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
-
-const Servicios = () => {
+import { Button } from 'react-bootstrap';
+import {Redirect } from 'react-router-dom';  
+import XDXD from '../XDXD.js';
+const ServicioXTecnico = () => {
     const [servicios, setServicios] = useState([{}]);
     const [user, setUser] = useState({});
     const [succes, setSucces] = useState(false);
+    const [servicio, setServicio] = useState({});
     const [formValue, handleInputChange] = useForm({
         id: ''
     })
-    useEffect(() => {
-        setUser(JSON.parse(localStorage.getItem('user')));
-        getServicios();
+    useEffect(() => {        
+        init();                          
+        //getServicios();                                  
+    }, []);
 
-
-    }, [])
-
-    const getServicios = () => {
-        axios.get('http://bielma.com/sem-isw/orden')
-            .then(res => {
-                setServicios(res.data.ordenes);
-            });
+    const init = async () =>{
+        const usuario = await JSON.parse(localStorage.getItem('user'));
+        console.log(usuario.sub);
+        setUser(usuario);  
+        axios.get('http://bielma.com/sem-isw/servicio/'+ usuario.sub)
+        .then(res => {
+            console.log(user.sub);
+            setServicios(res.data.servicios);
+        });
     }
+  
     const buscar = (e) =>{
         e.preventDefault();
         axios.get('http://bielma.com/sem-isw/orden/'+ formValue.id)        
         .then(res => {
             console.log(res);
-            setServicios(res.data.orden);
-        });    
+            setServicios([res.data.orden]);
+        });     
     }
+    const abrir = (e) =>{        
+        servicios.forEach(function(item){            
+                if(item.id_orden == e.target.id){   
+                    setServicio(item);                  
+                    setSucces(true);                     
+                }                
+        });              
+    }
+
     return (
-        <div>
+        
+        <div>                
+            {
+               succes && <XDXD servicio = {servicio}/>
+            }
             <Header user={user} />
             <form className="form-inline" onSubmit = {buscar}>
                 <input className="form-control mr-sm-2" 
-                    name = "id_insumo" 
+                    name = "id" 
                     type="search"
                     placeholder="id"
                      aria-label="Search"
@@ -48,8 +67,7 @@ const Servicios = () => {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">ID</th>
-                                <th scope="col">Cliente</th>
-                                <th scope="col">Tecnico</th>
+                                <th scope="col">Cliente</th>                            
                                 <th scope="col">Observaciones</th>
                                 <th scope="col">Status</th>
                             </tr>
@@ -59,18 +77,23 @@ const Servicios = () => {
                                 servicios.map(item => (
                                     <tr key={item.id_orden}>
                                         <td> {item.id_orden}</td>
-                                        <td>{item.telefono}</td>
-                                        <td>{item.id_empleado}</td>
+                                        <td>{item.telefono}</td>                                        
                                         <td>{item.observaciones}</td>
                                         <td>{item.status}</td>
+                                        <Button 
+                                            id = {item.id_orden} 
+                                            variant = {"info"} 
+                                            onClick = {abrir}> 
+                                            Detalles
+                                        </Button> 
                                     </tr>
+
                                 ))
                             }
-
                         </tbody>
                     </table>
                 </div>
     );
 }
 
-export default Servicios;
+export default ServicioXTecnico;

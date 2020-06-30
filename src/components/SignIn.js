@@ -50,12 +50,12 @@ const SignIn = () => {
         switch(puesto){
             case 'Tecnico':
                 return (
-                    <Redirect from="/login" to="/orden_servicio" />
+                    <Redirect from="/login" to="/servicios2" />
                 );
                 break;
             case 'Gerente' : 
                 return (
-                    <Redirect from="/login" to="/orden_servicio" />
+                    <Redirect from="/login" to="/servicios" />
                 );
                     
             break;

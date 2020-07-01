@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Header from '../Header';
 import useForm from '../../hooks/useForm';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+
+
 //import buscarEmpleado from '../../hooks/buscarEmpleado.js';
 const NuevaOrdenServicio = () => {
 
@@ -37,6 +40,7 @@ const NuevaOrdenServicio = () => {
             .then(res => {
                 alert(res.data.message);
                 console.log(res.data.message);                
+                generarPDF();
             }, (error) => {
                 console.log(error);
             });
@@ -54,7 +58,7 @@ const NuevaOrdenServicio = () => {
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user')));
         setToken(localStorage.getItem('token'));
-        getFecha();
+        getFecha();        
     }, [])
     const buscarCliente = (e) => {
         e.preventDefault();
@@ -73,6 +77,27 @@ const NuevaOrdenServicio = () => {
             setNombreEmpleado(res.data.empleado.nombre);
             
         });
+    }
+    const generarPDF = () => {
+        var doc = new jsPDF('p', 'pt');
+        doc.text(100,20, 'Servicio de mantenimiento de quipos de computo ');        
+        doc.text(20,50, 'Folio: ' + orden);
+        doc.text(300,50, 'Fecha: '+ fecha);
+        doc.text(50,90, 'Cliente' );
+        doc.text(20,120, 'Telefono: '+ formValues.telefono);
+        doc.text(20,150, 'Nombre: ' + nombreCliente);
+        doc.text(20,180, 'Email: ' +emailCliente);
+        doc.text(50,220, 'Equipo' );
+        doc.text(20,250, 'Equipo: ' + formValues.equipo);
+        doc.text(20,280, 'Falla: ' + formValues.descripcion);
+        doc.text(50,330, 'Técnico responsable' );
+        doc.text(20,360, 'ID Empleado: ' + formValues.id_empleado);
+        doc.text(20,390, 'Nombre: ' + nombreEmpleado);
+        doc.text(50,440, 'Servicio' );
+        doc.text(20,470, 'Status: ' + status);
+        
+        doc.save(orden + ".pdf");
+        
     }
     return (
         <div>

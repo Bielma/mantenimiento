@@ -1,28 +1,37 @@
 import { Button, Modal } from 'react-bootstrap';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import EditarServicio from './orden_servicio/EditarServicio.js';
-
-const XDXD = ({servicio}) => {
-    const [show, setShow] = useState(true);
-  
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
+import EditarServicioXGerente from './orden_servicio/EditarServicioXGerente.js';
+import { ServicioContext } from './ServicioContext.js';
+const XDXD = ({servicio, tipo}) => {
+    const {succes, setSucces} = useContext(ServicioContext);    
+    const handleClose = () => setSucces(false);
+  //  const handleShow = () => setShow(true);
+   
     return (
       <>
           
-        <Modal
-          show={show}
+        <Modal 
+          show={succes}
           onHide={handleClose}
           backdrop="static"
           keyboard={false}
+          size = "lg"
         >
           <Modal.Header closeButton>
             <Modal.Title>Modificar Status</Modal.Title>
           </Modal.Header>
-          <Modal.Body>            
-            <EditarServicio servicio = {servicio}/>
+          <Modal.Body>    
+            {
+              tipo == 'Tecnico' &&              
+              <EditarServicio servicio = {servicio}/>
+            } 
+             {
+              tipo == 'Gerente' &&              
+              <EditarServicioXGerente servicio = {servicio}/>
+            }        
+            
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>

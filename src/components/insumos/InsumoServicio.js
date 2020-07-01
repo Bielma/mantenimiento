@@ -25,8 +25,7 @@ const InsumoServicio = ({idOrden}) => {
     const getInsumo = (e) =>
     {        
        
-        axios.get('http://bielma.com/sem-isw/insumo/'+ formValues.idInsumo)
-        
+        axios.get('http://bielma.com/sem-isw/insumo/'+ formValues.idInsumo)        
         .then(res => {
             console.log(res);
             setInsumo(res.data.insumo);

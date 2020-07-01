@@ -3,7 +3,7 @@ import Header from '../Header';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
 import { Button } from 'react-bootstrap';
-import {Redirect } from 'react-router-dom';  
+ 
 import XDXD from '../XDXD.js';
 const ServicioXTecnico = () => {
     const [servicios, setServicios] = useState([{}]);
@@ -53,7 +53,7 @@ const ServicioXTecnico = () => {
                succes && <XDXD servicio = {servicio}/>
             }
             <Header user={user} />
-            <form className="form-inline" onSubmit = {buscar}>
+            <form className="form-inline" onSubmit = {buscar} tipo = {user.puesto}>
                 <input className="form-control mr-sm-2" 
                     name = "id" 
                     type="search"

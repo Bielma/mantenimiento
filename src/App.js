@@ -5,13 +5,13 @@ import {ServicioContext} from './components/ServicioContext.js';
 
 function App() {
   const  [insumos, setInsumos] = useState([]);
-  
+  const [succes, setSucces] = useState(false);  
   return (
-
-
     <ServicioContext.Provider value = {{
       insumos,
-      setInsumos
+      setInsumos,
+      succes,
+      setSucces
     }}>
       <Router/>
     </ServicioContext.Provider>    

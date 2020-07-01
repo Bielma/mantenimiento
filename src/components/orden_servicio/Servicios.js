@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import Header from '../Header';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
-
+import XDXD from '../XDXD.js';
+import { Button } from 'react-bootstrap';
+import { ServicioContext } from '../ServicioContext.js';
 const Servicios = () => {
+    const {succes, setSucces} = useContext(ServicioContext);
     const [servicios, setServicios] = useState([{}]);
-    const [user, setUser] = useState({});
-    const [succes, setSucces] = useState(false);
+    const [user, setUser] = useState({});      
+    const [servicio, setServicio] = useState({});
     const [formValue, handleInputChange] = useForm({
         id: ''
     })
+    
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user')));
         getServicios();
-
-
     }, [])
 
     const getServicios = () => {
@@ -31,8 +33,20 @@ const Servicios = () => {
             setServicios(res.data.orden);
         });    
     }
+    const abrir = (e) =>{        
+        servicios.forEach(function(item){            
+            if(item.id_orden == e.target.id){   
+                setServicio(item);                  
+                setSucces(true);                     
+            }                
+        });              
+    }
+
     return (
         <div>
+            {
+               succes && <XDXD servicio = {servicio} tipo = {user.puesto} mostrar = {true}/>
+            }
             <Header user={user} />
             <form className="form-inline" onSubmit = {buscar}>
                 <input className="form-control mr-sm-2" 
@@ -63,6 +77,15 @@ const Servicios = () => {
                                         <td>{item.id_empleado}</td>
                                         <td>{item.observaciones}</td>
                                         <td>{item.status}</td>
+                                        {
+                                            item.status !== 'Cerrada' &&
+                                            <Button 
+                                                id = {item.id_orden} 
+                                                variant = {"info"} 
+                                                onClick = {abrir}> 
+                                                Detalles
+                                            </Button> 
+                                        }
                                     </tr>
                                 ))
                             }

@@ -26,18 +26,17 @@ const EditarServicioXGerente = ({ servicio }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(formValues.status == 'Pendiente por cliente'){
-           cambiarStatus();
-        }else if(formValues.status == 'Cerrada'){
+        if(formValues.status == 'Cerrada'){
             cerrar();
+        }else{
+            cambiarStatus();
         }
         
     }
     const cambiarStatus = () =>
     {
         var diagnostico = {};
-        diagnostico['id_orden'] = servicio.id_orden;
-        diagnostico['diagnostico'] = formValues.diagnostico;
+        diagnostico['id_orden'] = servicio.id_orden;        
         diagnostico['status'] = formValues.status;
         let jsonVenta = JSON.stringify(diagnostico);
         let datos = 'datos=' + jsonVenta;
@@ -199,9 +198,38 @@ const EditarServicioXGerente = ({ servicio }) => {
                     <legend><span class="number">4 </span>Servicio</legend>
                     <label for="status">Status</label>
                     <select className="form-control" name="status" value = {formValues.status} onChange={handleInputChange}>
-                        <option name = "revision">En Revisión</option>
-                        <option name = "pendiente">Pendiente por cliente</option>
-                        <option name = "cerrada">Cerrada</option>
+                    {
+                        formValues.status == 'Con Diagnóstico' &&     
+                            <>
+                                <option name = "diagnóstico">Con Diagnóstico</option>
+                                <option name = "pendiente">Pendiente por cliente</option>
+                                <option name = "reparacion">En reparación</option>
+                            </>
+                    }
+                    {
+                         formValues.status == 'Concluida' &&     
+                         <>
+                            <option name = "concluida">Concluida</option>
+                            <option name = "cerrada">Cerrada</option>
+                         </>
+                    }
+                     {
+                         formValues.status == 'Pendiente por cliente' &&     
+                         <>                        
+                            <option name = "pendiente">Pendiente por cliente</option>                         
+                            <option name = "reparación">En reparación</option>
+                         </>
+                    }
+                    {
+                         formValues.status == 'En reparación' &&     
+                         <>                                                    
+                            <option name = "reparación">En reparación</option>
+                         </>
+                    }
+                    {
+                         formValues.status == 'Cerrada' &&                              
+                          <option name = "cerrada">Cerrada</option>                                                    
+                    }
                     </select>
                                       
                 </div>

@@ -26,7 +26,7 @@ const EditarServicio = ({ servicio }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(formValues.status == 'Con Daignóstico'){
+        if(formValues.status == 'Con Diagnóstico'){
            setDiagnostico();
         }else if(formValues.status == 'Concluida'){
             concluir();
@@ -87,9 +87,10 @@ const EditarServicio = ({ servicio }) => {
       insumos.map(item =>(
             sub = sub  + (item.precio * item.cantidad)        
       ));
-        iva = sub * 0.16;
+
+        iva = sub * 0.16;  
         setSubTotal(sub);
-        setIva(iva);
+        setIva(iva.toFixed(2));
         setTotal(sub + iva);
 
     }, [insumos]);
@@ -171,12 +172,37 @@ const EditarServicio = ({ servicio }) => {
                     <legend><span class="number">4 </span>Servicio</legend>
                     <label for="status">Status</label>
                     <select className="form-control" name="status" value = {formValues.status} onChange={handleInputChange}>
-                        <option name = "revision">En Revisión</option>
-                        <option name = "diagnostico">Con Daignóstico</option>
-                        <option name = "concluida">Concluida</option>
+                        {
+                            formValues.status == 'En Revisión' &&     
+                            <>
+                                <option name = "revision">En Revisión</option>
+                                <option name = "diagnostico">Con Diagnóstico</option>
+                            </>
+                        }
+                        
+                        {
+                            formValues.status == 'En reparación' &&     
+                            <>
+                                <option name = "revision">En reparación</option>
+                                <option name = "concluida">Concluida</option>
+                            </>  
+                        }
+                        {
+                            formValues.status == 'Concluida' &&     
+                            <>                                
+                                <option name = "concluida">Concluida</option>
+                            </>  
+                        }
+                       {
+                            formValues.status == 'Con Daignóstico' &&                                                              
+                            <option name = "diagnostico">Con Diagnóstico</option>
+                           
+                        }
+
+
                     </select>
                     {
-                        formValues.status == 'Con Daignóstico' &&                         
+                        formValues.status == 'Con Diagnóstico' &&                         
                         <textarea className="form-control" 
                         name="diagnostico" rows="3" 
                         placeholder = "Diagnóstico"
@@ -186,6 +212,16 @@ const EditarServicio = ({ servicio }) => {
 
                   
                 </div>
+                {
+                    formValues.status == 'En reparación' &&     
+                    <div className = "form-group" >                        
+                    <fieldset disabled>
+                        <textarea className="form-control" 
+                        name="diagnostico" rows="3"                                                         
+                        value= {servicio.diagnostico}> </textarea>
+                    </fieldset>
+                    </div>
+                }
                 {
                     formValues.status == 'Concluida' && 
                     <div className = "form-group" >                        
@@ -255,7 +291,7 @@ const EditarServicio = ({ servicio }) => {
                                 <label> Iva: {iva} </label>
                             </div>  
                             <div className="col-md-3">
-                                <label> Total: {subTotal + iva} </label>
+                                <label> Total: {total} </label>
                             </div>  
                          </div>   
                         

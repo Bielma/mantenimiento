@@ -76,16 +76,14 @@ const Servicios = () => {
                                         <td>{item.telefono}</td>
                                         <td>{item.id_empleado}</td>
                                         <td>{item.observaciones}</td>
-                                        <td>{item.status}</td>
-                                        {
-                                            item.status !== 'Cerrada' &&
+                                        <td>{item.status}</td>                                                                                 
                                             <Button 
                                                 id = {item.id_orden} 
                                                 variant = {"info"} 
                                                 onClick = {abrir}> 
                                                 Detalles
                                             </Button> 
-                                        }
+                                        
                                     </tr>
                                 ))
                             }

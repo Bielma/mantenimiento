@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from '../Header';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
 import { Button } from 'react-bootstrap';
- 
+import { ServicioContext } from '../ServicioContext.js';
+
 import XDXD from '../XDXD.js';
 const ServicioXTecnico = () => {
     const [servicios, setServicios] = useState([{}]);
     const [user, setUser] = useState({});
-    const [succes, setSucces] = useState(false);
+    const {succes, setSucces} = useContext(ServicioContext);
     const [servicio, setServicio] = useState({});
     const [formValue, handleInputChange] = useForm({
         id: ''
@@ -25,7 +26,9 @@ const ServicioXTecnico = () => {
         axios.get('http://bielma.com/sem-isw/servicio/'+ usuario.sub)
         .then(res => {
             console.log(user.sub);
-            setServicios(res.data.servicios);
+            
+            //setServicios(res.data.servicios);
+            setServicios(res.data.servicios.filter(item=>  item.status=== 'En reparación' || item.status=== 'En Revisión'));
         });
     }
   
@@ -50,7 +53,7 @@ const ServicioXTecnico = () => {
         
         <div>                
             {
-               succes && <XDXD servicio = {servicio}/>
+               succes && <XDXD servicio = {servicio} tipo = {user.puesto}/>
             }
             <Header user={user} />
             <form className="form-inline" onSubmit = {buscar} tipo = {user.puesto}>
@@ -80,12 +83,17 @@ const ServicioXTecnico = () => {
                                         <td>{item.telefono}</td>                                        
                                         <td>{item.falla_equipo}</td>
                                         <td>{item.status}</td>
-                                        <Button 
-                                            id = {item.id_orden} 
-                                            variant = {"info"} 
-                                            onClick = {abrir}> 
-                                            Detalles
-                                        </Button> 
+                                        
+                                            
+                                             <Button 
+                                                 id = {item.id_orden} 
+                                                 variant = {"info"} 
+                                                 onClick = {abrir}> 
+                                                 Editar
+                                             </Button> 
+
+                                        
+                                        
                                     </tr>
 
                                 ))

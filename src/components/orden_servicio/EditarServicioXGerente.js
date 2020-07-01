@@ -3,7 +3,7 @@ import useForm from '../../hooks/useForm';
 import axios from 'axios';
 import { ServicioContext } from '../ServicioContext.js';
 import InsumoServicio from '../insumos/InsumoServicio';
-
+import jsPDF from 'jspdf';
 const EditarServicioXGerente = ({ servicio }) => {
 
     const [insumos, setInsumos] = useState([]);
@@ -28,6 +28,7 @@ const EditarServicioXGerente = ({ servicio }) => {
         e.preventDefault();
         if(formValues.status == 'Cerrada'){
             cerrar();
+            generarPDF();
         }else{
             cambiarStatus();
         }
@@ -78,7 +79,7 @@ const EditarServicioXGerente = ({ servicio }) => {
     }, [])
 
     
-
+ 
     const buscarCliente = () => {
         axios.get('http://bielma.com/sem-isw/cliente/' + servicio.telefono)
             .then(res => {
@@ -105,7 +106,7 @@ const EditarServicioXGerente = ({ servicio }) => {
     {        
         var sub  = 0;
         var iva = 0;
-        servicio.insumos.map((item =>
+        servicio.detalles.map((item =>
             
             axios.get('http://bielma.com/sem-isw/insumo/'+ item.id_insumo)        
             .then(res => {           
@@ -136,6 +137,51 @@ const EditarServicioXGerente = ({ servicio }) => {
         console.log('Añadiendo costo...');
         setTotal(0);
         setTotal(subTotal + iva + parseInt(formValues.costo, 10));
+    }
+    const generarPDF = () => {
+        var x = 630;
+        var doc = new jsPDF('p', 'pt');
+        doc.text(100,20, 'Servicio de mantenimiento de quipos de computo ');        
+        doc.text(20,50, 'Folio: ' + servicio.id_orden);
+        doc.text(300,50, 'Fecha: '+ servicio.fecha);
+        doc.text(50,90, 'Cliente' );
+        doc.text(20,120, 'Telefono: '+ servicio.telefono);
+        doc.text(20,150, 'Nombre: ' + nombreCliente);
+        doc.text(20,180, 'Email: ' +emailCliente);
+        doc.text(50,220, 'Equipo' );
+        doc.text(20,250, 'Equipo: ' + servicio.equipo);
+        doc.text(20,280, 'Falla: ' + servicio.falla_equipo);
+
+        doc.text(50,330, 'Técnico responsable' );
+        doc.text(20,360, 'ID Empleado: ' + servicio.id_empleado);
+        doc.text(20,390, 'Nombre: ' + nombreEmpleado);
+
+        doc.text(50,440, 'Servicio' );
+        doc.text(20,470, 'Status: ' + formValues.status);
+        doc.text(20,500, 'Diagnostico: ' + servicio.diagnostico);
+        doc.text(20,530, 'Observaciones: ' + servicio.observaciones);
+        doc.text(20,560, 'Costo de servicio: ' + servicio.costo);
+        
+        if(insumos.length>1){
+            doc.text(50, 600, 'Insumos' );
+            doc.text(20, 630, 'ID' );
+            doc.text(50, 630, 'Nombre' );
+            doc.text(80, 630, 'Descripcion' );
+            doc.text(110, 630, 'Precio' );
+            doc.text(140, 630, 'Cantidad' );
+            doc.text(170, 630, 'Importe' );
+            for(var i = 0; i<insumos.length; i++){
+                
+            }
+        }
+        
+        doc.text(20,700, 'Subtotal: ' + subTotal);
+        doc.text(100,700, 'Iva: ' + iva);
+        doc.text(180,700, 'Total: ' + total);
+
+        
+        doc.save(servicio.id_orden + ".pdf");
+        
     }
     return (
         <div>

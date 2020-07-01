@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from '../Header';
 import useForm from '../../hooks/useForm';
 import axios from 'axios';
 import InsumoServicio from '../insumos/InsumoServicio.js'
+import { ServicioContext } from '../ServicioContext.js';
 //import buscarEmpleado from '../../hooks/buscarEmpleado.js';
 const EditarServicio = ({ servicio }) => {
 
-
+    const {insumos} = useContext(ServicioContext);
     const [token, setToken] = useState('');
     const [nombreEmpleado, setNombreEmpleado] = useState('');
     const [nombreCliente, setNombreCliente] = useState('');
-    const [emailCliente, setEmailCliente] = useState('');
-    const [insumos, setInsumos] = useState([]);
+    const [emailCliente, setEmailCliente] = useState('');    
     const [numInsumos, setNumInsumos] = useState(0);
-    const [total, setTotal] = useState(0)
+    const [total, setTotal] = useState(0);
+    const [iva, setIva] = useState(0);
+    const [subTotal, setSubTotal] = useState(0);
     //const [status, setStatus] = useState('En Revisión');    
     const [formValues, handleInputChange] = useForm({
         status: servicio.status,
@@ -76,9 +78,21 @@ const EditarServicio = ({ servicio }) => {
         //  setServicio(servicio);
         // setUser(JSON.parse(localStorage.getItem('user')));
         //setToken(localStorage.getItem('token'));
-
-
     }, [])
+
+    useEffect(() => {
+      console.log('cambio insumos');
+      var sub  = 0;
+      var iva = 0;
+      insumos.map(item =>(
+            sub = sub  + (item.precio * item.cantidad)        
+      ));
+        iva = sub * 0.16;
+        setSubTotal(sub);
+        setIva(iva);
+        setTotal(sub + iva);
+
+    }, [insumos]);
 
     const buscarCliente = () => {
         axios.get('http://bielma.com/sem-isw/cliente/' + servicio.telefono)
@@ -99,9 +113,8 @@ const EditarServicio = ({ servicio }) => {
     const addInsumoComponent = () =>{
         setNumInsumos(numInsumos +1);  
     }
-    const addInsumo = () =>{
-        console.log("Probando prop");
-        
+    const addInsumo = (detallesInsumo) =>{
+        console.log("Probando prop");        
     }
 
     return (
@@ -190,14 +203,14 @@ const EditarServicio = ({ servicio }) => {
                        
                         {
                             numInsumos === 1 &&
-                            <InsumoServicio addInsumo = {addInsumo}/>
+                            <InsumoServicio idOrden = {servicio.id_orden}/>
                         }    
                         {
                             
                             numInsumos === 2 &&
                             <>
-                                <InsumoServicio />
-                                <InsumoServicio />
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
                             </>
                             
                         }   
@@ -205,9 +218,9 @@ const EditarServicio = ({ servicio }) => {
                             
                             numInsumos === 3 &&
                             <>
-                                <InsumoServicio addInsumo = {addInsumo}/>
-                                <InsumoServicio />
-                                <InsumoServicio />
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
                             </>
                             
                         }    
@@ -215,10 +228,10 @@ const EditarServicio = ({ servicio }) => {
                             
                             numInsumos === 4 &&
                             <>
-                                <InsumoServicio />
-                                <InsumoServicio />
-                                <InsumoServicio />
-                                <InsumoServicio />
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
                             </>
                             
                         }     
@@ -226,29 +239,36 @@ const EditarServicio = ({ servicio }) => {
                             
                             numInsumos === 5 &&
                             <>
-                                <InsumoServicio />
-                                <InsumoServicio />
-                                <InsumoServicio />
-                                <InsumoServicio />
-                                <InsumoServicio />
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
+                                <InsumoServicio idOrden = {servicio.id_orden}/>
                             </>
                             
-                        }     
+                        }   
+                        <div className="row">
+                            <div className="col-md-3">
+                                <label> SubTotal: {subTotal} </label>    
+                            </div>  
+                            <div className="col-md-3">
+                                <label> Iva: {iva} </label>
+                            </div>  
+                            <div className="col-md-3">
+                                <label> Total: {subTotal + iva} </label>
+                            </div>  
+                         </div>   
                         
+                            
                         
                         <div className="col-md-1">
                             <input type="button" class="btn btn-success" id="add" value="+" onClick = {addInsumoComponent}/>
                         </div>
                     </div>                        
-                                       
-                     
+                                                            
                 }
                 
-                {
-                     insumos.map(item => (
-                        <InsumoServicio />
-                    ))
-                }
+                
                 <form className="form-group" onSubmit={handleSubmit}>                    
                     <input type="submit" className="btn btn-primary" name="enviar" value="Actualizar" />                    
                 </form>

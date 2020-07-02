@@ -11,7 +11,7 @@ class Header extends Component {
         if (tipoEmpleado === 'Gerente') {
             return (
                 <Navbar bg="light" expand="lg">
-                    <Navbar.Brand >Orden de Servicio</Navbar.Brand>
+                    <Navbar.Brand ><strong>Servicio</strong>Técnico</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
@@ -133,7 +133,7 @@ class Header extends Component {
         } else {
             return (
                 <Navbar bg="light" expand="lg">
-                    <Navbar.Brand href="#home"><strong>Tienda</strong>khe?</Navbar.Brand>
+                    <Navbar.Brand href="#home"><strong>Servicio</strong>Técnico</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className="justify-content-end">
                         <Nav.Link >

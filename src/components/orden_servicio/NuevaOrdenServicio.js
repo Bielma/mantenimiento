@@ -25,15 +25,16 @@ const NuevaOrdenServicio = () => {
 //    const [clienteValues, buscar] = buscarEmpleado(formValues.telefono);
     const handleSubmit = (e) => {        
         e.preventDefault();
-        var orden = {};
+        var servicio = {};
         console.log("ENVIANDO..");
-        orden['fecha'] = fecha;
-        orden['telefono'] = formValues.telefono;
-        orden["equipo"] = formValues.equipo;
-        orden['observaciones'] = formValues.descripcion;
-        orden['id_empleado'] = formValues.id_empleado;
-        orden['status'] = status;
-        let jsonVenta = JSON.stringify(orden);
+        servicio['id_orden'] = orden;
+        servicio['fecha'] = fecha;
+        servicio['telefono'] = formValues.telefono;
+        servicio["equipo"] = formValues.equipo;
+        servicio['observaciones'] = formValues.descripcion;
+        servicio['id_empleado'] = formValues.id_empleado;
+        servicio['status'] = status;
+        let jsonVenta = JSON.stringify(servicio);
         let datos = 'datos=' + jsonVenta;
         console.log(jsonVenta);
         axios.post('http://bielma.com/sem-isw/orden', datos)

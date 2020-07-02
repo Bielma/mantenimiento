@@ -10,6 +10,7 @@ const Servicios = () => {
     const [servicios, setServicios] = useState([{}]);
     const [user, setUser] = useState({});      
     const [servicio, setServicio] = useState({});
+    const [detalles, setdetalles] = useState([])
     const [formValue, handleInputChange] = useForm({
         id: ''
     })
@@ -23,6 +24,8 @@ const Servicios = () => {
         axios.get('http://bielma.com/sem-isw/orden')
             .then(res => {
                 setServicios(res.data.ordenes);
+                //setServicios(res.data.servicios.filter(item=>  item.status=== 'En reparación' || item.status=== 'En Revisión'));
+                //setdetalles(res.data.detalles);
             });
     }
     const buscar = (e) =>{
@@ -36,8 +39,14 @@ const Servicios = () => {
     const abrir = (e) =>{        
         servicios.forEach(function(item){            
             if(item.id_orden == e.target.id){   
-                setServicio(item);                  
-                setSucces(true);                     
+                setServicio(item);           
+                axios.get('http://bielma.com/sem-isw/insumo_orden')
+                .then(res => {                    
+                    //setServicios(res.data.servicios.filter(item=>  item.status=== 'En reparación' || item.status=== 'En Revisión'));
+                    setdetalles(res.data.detalles.filter(detalle => detalle.id_orden === item.id_orden));
+                    setSucces(true);            
+                });
+                
             }                
         });              
     }
@@ -45,7 +54,7 @@ const Servicios = () => {
     return (
         <div>
             {
-               succes && <XDXD servicio = {servicio} tipo = {user.puesto} mostrar = {true}/>
+               succes && <XDXD servicio = {servicio} tipo = {user.puesto} mostrar = {true} detalles = {detalles}/>
             }
             <Header user={user} />
             <form className="form-inline" onSubmit = {buscar}>

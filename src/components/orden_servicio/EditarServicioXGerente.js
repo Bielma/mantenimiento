@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ServicioContext } from '../ServicioContext.js';
 import InsumoServicio from '../insumos/InsumoServicio';
 import jsPDF from 'jspdf';
-const EditarServicioXGerente = ({ servicio }) => {
+const EditarServicioXGerente = ({ servicio, detalles}) => {
 
     const [insumos, setInsumos] = useState([]);
     const [token, setToken] = useState('');
@@ -103,34 +103,37 @@ const EditarServicioXGerente = ({ servicio }) => {
                 
     }
     const getDetalleInsumo = (e) =>
-    {        
+    {      
+        
         var sub  = 0;
         var iva = 0;
-        servicio.detalles.map((item =>
+        var insumosTem = [];
+        
+        detalles.map((item =>
             
             axios.get('http://bielma.com/sem-isw/insumo/'+ item.id_insumo)        
-            .then(res => {           
-                setInsumos(
-                    [...insumos,
-                        {
-                            idInsumo : item.id_insumo,
-                            cantidad: item.cantidad,
-                            precio: item.precio,
-                            descripcion: res.data.insumo.descripcion,
-                            nombre: res.data.insumo.nombre,
-                        }
-                    ]);
-                    sub = sub  + (item.precio * item.cantidad);
-                    iva = sub * 0.16;
-                    setSubTotal(sub);
-                    setIva(iva);
-                    setTotal(sub + iva + formValues.costo);
-            })
-            
-
+            .then(res => {     
+                var insumoDetalles = {
+                    idInsumo: item.id_insumo,
+                    cantidad:item.cantidad,
+                    precio:item.precio,
+                    descripcion: res.data.insumo.descripcion,
+                    nombre:res.data.insumo.nombre
+                };
+              
+                insumosTem.push(insumoDetalles);
+                sub = sub  + (item.precio * item.cantidad);
+                iva = sub * 0.16;
+                setSubTotal(sub);
+                setIva(iva);
+                setTotal(sub + iva + formValues.costo);
+                
+            })            
         ));
-        
-        
+       
+        setInsumos(insumosTem);
+
+       
     }
     const añadirCosto = (e) =>{        
         e.preventDefault();
@@ -139,7 +142,7 @@ const EditarServicioXGerente = ({ servicio }) => {
         setTotal(subTotal + iva + parseInt(formValues.costo, 10));
     }
     const generarPDF = () => {
-        var x = 630;
+        var y = 660;
         var doc = new jsPDF('p', 'pt');
         doc.text(100,20, 'Servicio de mantenimiento de quipos de computo ');        
         doc.text(20,50, 'Folio: ' + servicio.id_orden);
@@ -162,22 +165,30 @@ const EditarServicioXGerente = ({ servicio }) => {
         doc.text(20,530, 'Observaciones: ' + servicio.observaciones);
         doc.text(20,560, 'Costo de servicio: ' + servicio.costo);
         
-        if(insumos.length>1){
+        if(insumos.length>0){
             doc.text(50, 600, 'Insumos' );
             doc.text(20, 630, 'ID' );
-            doc.text(50, 630, 'Nombre' );
-            doc.text(80, 630, 'Descripcion' );
-            doc.text(110, 630, 'Precio' );
-            doc.text(140, 630, 'Cantidad' );
-            doc.text(170, 630, 'Importe' );
+            doc.text(100, 630, 'Nombre' );
+            doc.text(200, 630, 'Descripcion' );
+            doc.text(300, 630, 'Precio' );
+            doc.text(400, 630, 'Cantidad' );
+            doc.text(500, 630, 'Importe' );
             for(var i = 0; i<insumos.length; i++){
-                
+
+                doc.text(20, y, '' + insumos[i].idInsumo);
+                doc.text(100, y, '' + insumos[i].nombre);
+                doc.text(200, y, '' + insumos[i].descripcion.substr(0,7) + '...');
+                doc.text(300, y, '' + insumos[i].precio);
+                doc.text(400, y, '' + insumos[i].cantidad);
+                doc.text(500, y, '' + insumos[i].cantidad * insumos[i].precio);
+
+                y = y+30;
             }
         }
         
-        doc.text(20,700, 'Subtotal: ' + subTotal);
-        doc.text(100,700, 'Iva: ' + iva);
-        doc.text(180,700, 'Total: ' + total);
+        doc.text(20, y +20, 'Subtotal: ' + subTotal);
+        doc.text(200,y +20, 'Iva: ' + iva);
+        doc.text(300,y +20, 'Total: ' + total);
 
         
         doc.save(servicio.id_orden + ".pdf");

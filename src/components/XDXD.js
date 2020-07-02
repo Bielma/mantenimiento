@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import EditarServicio from './orden_servicio/EditarServicio.js';
 import EditarServicioXGerente from './orden_servicio/EditarServicioXGerente.js';
 import { ServicioContext } from './ServicioContext.js';
-const XDXD = ({servicio, tipo}) => {
+const XDXD = ({servicio, tipo, detalles}) => {
     const {succes, setSucces} = useContext(ServicioContext);    
     const handleClose = () => setSucces(false);
   //  const handleShow = () => setShow(true);
@@ -25,11 +25,11 @@ const XDXD = ({servicio, tipo}) => {
           <Modal.Body>    
             {
               tipo == 'Tecnico' &&              
-              <EditarServicio servicio = {servicio}/>
+              <EditarServicio servicio = {servicio} detalles = {detalles}/>
             } 
              {
               tipo == 'Gerente' &&              
-              <EditarServicioXGerente servicio = {servicio}/>
+              <EditarServicioXGerente servicio = {servicio} detalles = {detalles}/>
             }        
             
           </Modal.Body>
